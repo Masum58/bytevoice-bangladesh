@@ -125,6 +125,13 @@ function ByteVoiceLandingContent() {
     setCallLines([]);
 
     try {
+      // Verify browser microphone capability
+      if (typeof window !== "undefined" && (!navigator?.mediaDevices || !navigator.mediaDevices.getUserMedia)) {
+        throw new Error(
+          "ব্রাউজারে মাইক্রোফোন সাপোর্ট পাওয়া যায়নি। অনুগ্রহ করে অ্যাড্রেস বারে 0.0.0.0 এর বদলে 'http://localhost:8000' ওপেন করুন এবং Google Chrome ব্যবহার করুন।"
+        );
+      }
+
       // 1. Get short-lived token from our FastAPI backend
       const { token } = await getSessionStart();
 
@@ -134,7 +141,14 @@ function ByteVoiceLandingContent() {
         connectionType: "webrtc",
       });
     } catch (caught: any) {
-      setError(caught?.message || "Failed to start call. Ensure ELEVENLABS_API_KEY is configured in backend.");
+      const msg: string = caught?.message || "";
+      if (msg.includes("getUserMedia") || msg.includes("mediaDevices") || caught?.name === "NotAllowedError") {
+        setError(
+          "মাইক্রোফোন এক্সেস পাওয়া যায়নি! ব্রাউজারের অ্যাড্রেস বারে '0.0.0.0' থাকলে পরিবর্তন করে 'http://localhost:8000' লিখুন এবং ব্রাউজারে মাইক্রোফোন Allow করুন।"
+        );
+      } else {
+        setError(msg || "Failed to start call. Ensure ELEVENLABS_API_KEY is configured in backend.");
+      }
     } finally {
       setEngaging(false);
     }
