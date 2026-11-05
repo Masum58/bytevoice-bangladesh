@@ -1,0 +1,23 @@
+# ==============================================================================
+# ByteVoice Bangladesh — Python Dependencies
+# ==============================================================================
+
+# Core API & ASGI Web Server
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+
+# Database ORM & PostgreSQL Support
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.9
+
+# Validation & Settings Management
+pydantic>=2.10.0
+pydantic-settings>=2.6.0
+
+# Async HTTP Client (for ElevenLabs WebRTC tokens & tool calls)
+httpx>=0.27.0
+
+# Testing
+pytest>=8.0.0
+pytest-mock>=3.14.0
+

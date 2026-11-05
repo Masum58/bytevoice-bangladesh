@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  # 1. PostgreSQL Database Service
+  db:
+    image: postgres:16-alpine
+    container_name: bytevoice-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: bytevoice
+      POSTGRES_USER: bytevoice_user
+      POSTGRES_PASSWORD: bytevoice_secure_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bytevoice_user -d bytevoice"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. ByteVoice App (FastAPI + Next.js UI)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bytevoice-app
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://bytevoice_user:bytevoice_secure_pass@db:5432/bytevoice
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+      - ELEVENLABS_AGENT_ID=${ELEVENLABS_AGENT_ID}
+      - ELEVENLABS_VOICE_ID=${ELEVENLABS_VOICE_ID}
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+
+volumes:
+  pgdata:
+    driver: local
+
