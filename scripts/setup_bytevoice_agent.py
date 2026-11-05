@@ -31,7 +31,7 @@ from bytevoice.voice.persona import (
 
 API = "https://api.elevenlabs.io"
 TOOL_TIMEOUT_S = 10
-DEFAULT_VOICE_ID = "hpp4J3VqNfWAUOO0d1Us"  # Bella - crystal clear pronunciation for Bengali and multilingual audio
+DEFAULT_VOICE_ID = "5Rai2zlyEQqE9aoqI8Jy"  # Native Bangladeshi voice (bn) from user voice library
 
 
 def build_tool_payload(spec: dict) -> dict:
@@ -55,7 +55,7 @@ def build_tool_payload(spec: dict) -> dict:
     return payload
 
 
-def build_agent_payload(model_id: str = "eleven_turbo_v2", language: str = "en", voice_id: str | None = None) -> dict:
+def build_agent_payload(model_id: str = "eleven_flash_v2", language: str = "en", voice_id: str | None = None) -> dict:
     """Build complete agent configuration payload for ElevenLabs ConvAI."""
     payload = {
         "name": AGENT_NAME,
@@ -72,9 +72,9 @@ def build_agent_payload(model_id: str = "eleven_turbo_v2", language: str = "en",
             "tts": {
                 "model_id": model_id,
                 "voice_id": voice_id or DEFAULT_VOICE_ID,
-                "stability": 0.72,
-                "similarity_boost": 0.85,
-                "speed": 0.94,
+                "stability": 0.5,
+                "similarity_boost": 0.75,
+                "speed": 1.0,
             },
             "turn": {
                 "turn_timeout": 7,
