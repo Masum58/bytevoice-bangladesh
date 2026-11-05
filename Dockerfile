@@ -15,23 +15,17 @@ FROM python:3.12-slim AS runner
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    build-essential \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install uv for fast package management
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Copy python requirements and install
-COPY pyproject.toml requirements.txt ./
-RUN uv pip install --system -r requirements.txt -e .
+COPY requirements.txt ./
+RUN uv pip install --system -r requirements.txt
 
 # Copy backend source code
 COPY src/bytevoice/ ./src/bytevoice/
 COPY scripts/ ./scripts/
+COPY main.py ./
 
 # Copy built frontend static export from Stage 1
 COPY --from=frontend-builder /web/out ./web/out
@@ -45,5 +39,5 @@ ENV BYTEVOICE_WEB_DIR=/app/web/out
 EXPOSE 8000
 
 # Start FastAPI with Uvicorn
-CMD ["uvicorn", "bytevoice.api:create_app", "--host", "0.0.0.0", "--port", "8000", "--factory"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 

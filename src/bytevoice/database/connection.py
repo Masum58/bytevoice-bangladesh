@@ -12,12 +12,20 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Ensure data directory exists for SQLite
-DATA_DIR = Path(__file__).resolve().parents[3] / "data"
+DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 # Default to SQLite file in data/ if DATABASE_URL is not set
 DEFAULT_SQLITE_URL = f"sqlite:///{DATA_DIR / 'bytevoice.db'}"
 DATABASE_URL = os.environ.get("DATABASE_URL", DEFAULT_SQLITE_URL)
+if not DATABASE_URL:
+    DATABASE_URL = DEFAULT_SQLITE_URL
+
+# Normalize PostgreSQL driver for SQLAlchemy 2.0 (psycopg2)
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
+elif DATABASE_URL.startswith("postgresql://") and not DATABASE_URL.startswith("postgresql+"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
 
 # SQLite needs check_same_thread=False for FastAPI multithreaded workers
 connect_args = {}

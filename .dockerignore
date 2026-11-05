@@ -1,0 +1,16 @@
+.git
+.gitignore
+.env
+.env.*
+node_modules
+web/node_modules
+web/.next
+web/out
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.venv
+data/*.db
+data/*.sqlite3
+

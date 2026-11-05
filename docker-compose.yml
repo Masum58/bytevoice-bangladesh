@@ -30,11 +30,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=postgresql://bytevoice_user:bytevoice_secure_pass@db:5432/bytevoice
-      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
-      - ELEVENLABS_AGENT_ID=${ELEVENLABS_AGENT_ID}
-      - ELEVENLABS_VOICE_ID=${ELEVENLABS_VOICE_ID}
+      - DATABASE_URL=postgresql+psycopg2://bytevoice_user:bytevoice_secure_pass@db:5432/bytevoice
       - PORT=8000
     ports:
       - "8000:8000"

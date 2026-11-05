@@ -9,6 +9,7 @@ uvicorn[standard]>=0.30.0
 # Database ORM & PostgreSQL Support
 sqlalchemy>=2.0.0
 psycopg2-binary>=2.9.9
+psycopg[binary]>=3.1.18
 
 # Validation & Settings Management
 pydantic>=2.10.0
