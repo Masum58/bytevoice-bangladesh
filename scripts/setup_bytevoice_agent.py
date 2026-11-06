@@ -31,7 +31,7 @@ from bytevoice.voice.persona import (
 
 API = "https://api.elevenlabs.io"
 TOOL_TIMEOUT_S = 10
-DEFAULT_VOICE_ID = "5Rai2zlyEQqE9aoqI8Jy"  # Native Bangladeshi voice (bn) from user voice library
+DEFAULT_VOICE_ID = "EXAVITQu4vr4xnSDxMaL"  # Sarah - clear, standard, universal ConvAI voice
 
 
 def build_tool_payload(spec: dict) -> dict:
